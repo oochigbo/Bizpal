@@ -1,0 +1,20 @@
+
+-- Remove existing Bizpal policies safely
+
+drop policy if exists "Owners manage their businesses"
+on public.businesses;
+
+drop policy if exists "Authenticated users can view plans"
+on public.plans;
+
+drop policy if exists "Owners manage their subscriptions"
+on public.subscriptions;
+
+drop policy if exists "Owners manage their sales"
+on public.sales;
+
+drop policy if exists "Owners manage their messages"
+on public.messages;
+
+drop policy if exists "Owners manage their notes"
+on public.business_notes;
