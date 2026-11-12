@@ -1,0 +1,213 @@
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const BizpalApp());
+}
+
+class BizpalApp extends StatelessWidget {
+  const BizpalApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Bizpal',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+        ),
+        useMaterial3: true,
+      ),
+      home: const AuthScreen(),
+    );
+  }
+}
+
+class AuthScreen extends StatefulWidget {
+  const AuthScreen({super.key});
+
+  @override
+  State<AuthScreen> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends State<AuthScreen> {
+  bool isLogin = false;
+
+  final formKey = GlobalKey<FormState>();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void submitForm() {
+    if (formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            isLogin
+                ? 'Login screen is ready!'
+                : 'Registration screen is ready!',
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Bizpal'),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Icon(
+                  Icons.business_center,
+                  size: 70,
+                  color: Colors.blue,
+                ),
+
+                const SizedBox(height: 16),
+
+                Text(
+                  isLogin ? 'Welcome Back!' : 'Create Your Bizpal Account',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                if (!isLogin) ...[
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Full Name',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Enter your full name';
+                      }
+                      return null;
+                    },
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  TextFormField(
+                    keyboardType: TextInputType.phone,
+                    decoration: const InputDecoration(
+                      labelText: 'Phone Number',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Enter your phone number';
+                      }
+                      return null;
+                    },
+                  ),
+
+                  const SizedBox(height: 16),
+                ],
+
+                TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    labelText: 'Email Address',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null ||
+                        !value.contains('@') ||
+                        !value.contains('.')) {
+                      return 'Enter a valid email address';
+                    }
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: 16),
+
+                TextFormField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.length < 6) {
+                      return 'Password must have at least 6 characters';
+                    }
+                    return null;
+                  },
+                ),
+
+                if (!isLogin) ...[
+                  const SizedBox(height: 16),
+
+                  TextFormField(
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Confirm Password',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value != passwordController.text) {
+                        return 'Passwords do not match';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
+
+                const SizedBox(height: 24),
+
+                ElevatedButton(
+                  onPressed: submitForm,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(16),
+                  ),
+                  child: Text(
+                    isLogin ? 'Login' : 'Create Account',
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      isLogin = !isLogin;
+                      formKey.currentState?.reset();
+                      passwordController.clear();
+                    });
+                  },
+                  child: Text(
+                    isLogin
+                        ? "Don't have an account? Sign Up"
+                        : 'Already have an account? Login',
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
