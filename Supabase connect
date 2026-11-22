@@ -1,0 +1,28 @@
+
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'login_screen.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Supabase.initialize(
+    url: 'https://sxenatlzgkgxcbqpiwjr.supabase.co',
+    anonKey: 'sb_publishable_mAIHpkdE-V0qIFgrzYFkCg_bf-WCT5d',
+  );
+
+  runApp(const BizpalApp());
+}
+
+class BizpalApp extends StatelessWidget {
+  const BizpalApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'BizPal',
+      home: const LoginScreen(),
+    );
+  }
+}
